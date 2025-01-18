@@ -15,11 +15,38 @@ class User(db.Model):
     email = db.Column(db.String(120), unique = True, nullable = False)
 
     def json(self):
-        return {'id': self.id, 'name': self.name, 'email': self.email}
+        return {
+            'id': self.id,
+            'name': self.name,
+            'email': self.email
+        }
+
+class Event(db.Model):
+    __tablename__ = "events"
+    id = db.Column(db.Integer, primary_key = True)
+    title = db.Column(db.String(200), nullable = False)
+    start_time = db.Column(db.String(100), nullable = False)
+    end_time = db.Column(db.String(100), nullable = False)
+    location = db.Column(db.String(200), nullable = False)
+    details = db.Column(db.Text, nullable = True)
+    attendees = db.Column(db.Text, nullable = True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable = False)
+
+    def json(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'start_time': self.start_time,
+            'end_time': self.end_time,
+            'location': self.location,
+            'details': self.details,
+            'attendees': self.attendees,
+            'user_id': self.user_id
+        }
 
 db.create_all()
 
-# test route 
+# test route
 @app.route('/test', methods = ['GET'])
 def test():
     return jsonify({'message': 'the server is running'})
@@ -42,9 +69,7 @@ def create_user():
             jsonify({
                 'message': 'error creating user',
                 'error': str(e)
-            }),
-            500
-        )
+            }), 500)
 
 # get all users
 @app.route('/api/users', methods = ['GET'])
@@ -58,9 +83,7 @@ def get_users():
             jsonify({
                 'message': 'error getting users',
                 'error': str(e)
-            }),
-            500
-        )
+            }), 500)
 
 # get a user by id
 @app.route('/api/users/<id>', methods = ['GET'])
@@ -68,22 +91,14 @@ def get_user(id):
     try:
         user = User.queryfilter_by(id=id).first()
         if user:
-            return make_response(
-                jsonify({'user': user.json()}),
-                200
-            )
-        return make_response(
-            jsonify({'message': 'user not found'}),
-            404
-        )
+            return make_response(jsonify({'user': user.json()}), 200)
+        return make_response(jsonify({'message': 'user not found'}), 404)
     except Exception as e:
         return make_response(
             jsonify({
                 'message': 'error getting user',
                 'error': str(e)
-            }),
-            500
-        )
+            }), 500)
 
 # update a user by id
 @app.route('/api/users/<id>', methods = ['PUT'])
@@ -95,19 +110,14 @@ def update_user(id):
             user.name = data['name']
             user.email = data['email']
             db.session.commit()
-            return make_response(
-                jsonify({'message': 'user updated'}), 
-                200
-            )
-        return make_response(
-            jsonify({'message': 'user not found'}), 
-            404
-        )
+            return make_response(jsonify({'message': 'user updated'}), 200)
+        return make_response(jsonify({'message': 'user not found'}), 404)
     except Exception as e:
         return make_response(
-            jsonify({'message': 'error updating user', 'error': str(e)}), 
-            500
-        )
+            jsonify({
+                'message': 'error updating user', 
+                'error': str(e)
+            }), 500)
 
 # delete a user by id
 @app.route('/api/users/<id>', methods = ['DELETE'])
@@ -117,22 +127,12 @@ def delete_user(id):
         if user:
             db.session.delete(user)
             db.session.commit()
-            return make_response(
-                jsonify({'message': 'user deleted'}), 
-                200
-            )
-        return make_response(
-            jsonify({'message': 'user not found'}), 
-            404
-        ) 
+            return make_response(jsonify({'message': 'user deleted'}), 200)
+        return make_response(jsonify({'message': 'user not found'}), 404)
     except Exception as e:
         return make_response(
             jsonify({
                 'message': 'error deleting user', 
                 'error': str(e)
-            }), 
-            500
-        )
-
-
+            }), 500)
 
