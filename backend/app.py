@@ -6,7 +6,7 @@ from os import environ
 app = Flask(__name__)
 CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('DATABASE_URL')
-db = SQlAlchemy(app)
+db = SQLAlchemy(app)
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -63,10 +63,10 @@ def get_users():
         )
 
 # get a user by id
-@app.route('api/users/<id>', methods = ['GET'])
+@app.route('/api/users/<id>', methods = ['GET'])
 def get_user(id):
     try:
-        user = User.queryfilter_by(id = id).first()
+        user = User.queryfilter_by(id=id).first()
         if user:
             return make_response(
                 jsonify({'user': user.json()}),
@@ -86,10 +86,10 @@ def get_user(id):
         )
 
 # update a user by id
-@app.route('/api/flask/users/<id>', methods = ['PUT'])
+@app.route('/api/users/<id>', methods = ['PUT'])
 def update_user(id):
     try:
-        user = User.query.filter_by(id = id).first()
+        user = User.query.filter_by(id=id).first()
         if user:
             data = request.get_json()
             user.name = data['name']
@@ -110,10 +110,10 @@ def update_user(id):
         )
 
 # delete a user by id
-@app.route('/api/flask/users/<id>', methods = ['DELETE'])
+@app.route('/api/users/<id>', methods = ['DELETE'])
 def delete_user(id):
     try:
-        user = User.query.filter_by(id = id).first()
+        user = User.query.filter_by(id=id).first()
         if user:
             db.session.delete(user)
             db.session.commit()
