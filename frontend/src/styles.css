@@ -1,11 +1,57 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;100i;200;200i;300;300i;400;400i;500;500i;600;600i;700;700i;800;800i;900;900i&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Flex:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @import url("./Home.css");
+h1 {
+    margin: 3rem;
+    font-family: 'Roboto Flex', sans-serif; 
+    font-size: 3rem;
+    padding-bottom: 1rem;
+}
+
+a{
+    all: unset;
+}
 
 h2, h3, h4 {
     font-family: 'Inter', sans-serif;
+    font-size: 1.75rem;
     padding-left: 1rem;
     margin: 1rem;
+    font-weight:500;
+}
+
+.general-image {
+    max-height: 500px;
+    max-width: 500px;
+    margin: 1.5rem;
+    margin-top: 4rem;
+    border-radius: 20px;
+    margin-left: auto;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+}
+
+#cta-section h1{
+    padding: 0;
+}
+
+#cta-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+#signup-button{
+    background-color: #ffe30d;
+    border-radius: 20px;
+    justify-content: center;
+    align-items: center;
+    margin-left: 2rem;
+}
+
+#signup-button h3{
+    align-content: center;
+    padding: 0;
 }
 
 .banner{
@@ -17,14 +63,69 @@ h2, h3, h4 {
 
     display: flex;
     flex-direction: row;
-    height: 5rem;
+    height: 7rem;
+    margin-bottom: 2rem;
 }
 
 .banner h1{
-    margin: 1rem;
     color: #fff;
-    font-family: 'Roboto', sans-serif; 
 }
+
+.login-button{
+    margin-top: 1rem;
+    margin-right: 0.5rem;
+    margin-left: auto;
+
+}
+
+.login-button h2{
+    background-color: hsl(208, 88%, 75%);
+    
+    right: 0;
+    padding: 8px 12px;
+    border-radius: 15px;
+}
+
+#landing-body {
+    margin-top: 5rem;
+    display: flex;
+    flex-direction: row;
+}
+
+#landing-body h2 {
+    margin-top: 7rem;
+    margin-left: 3rem;
+    margin-bottom: 2.5rem;
+}
+
+#icon-row{
+    display: flex;
+    flex-direction: row;
+    margin-top: 1rem;
+    margin-left: 7rem;
+
+    align-content: flex-start;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    width:fit-content;
+}
+
+#icon-row h3{
+    left: 0;
+    font-size: 2rem;
+    align-items: center;
+    margin-left: 0;
+    padding-left: 0;
+}
+
+#icon{
+    left: 0;
+    width:40px;
+    height:40px;
+}
+
+/*----------------------------------------------------------------*/
 
 #question{
     /* What would you like to do? */
