@@ -26,15 +26,60 @@ h2, h3, h4 {
     font-family: 'Roboto', sans-serif; 
 }
 
-.login-button {
-    position: absolute;
-    right: 1rem;
-    margin-bottom: 2rem;
+#question{
+    /* What would you like to do? */
+
+position: absolute;
+width: 573px;
+height: 166px;
+left: 182px;
+top: 228px;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 600;
+font-size: 80px;
+line-height: 94px;
+
+color: #000000;
 }
 
-.login-button h2{
-    padding: 8px 12px;
-    background-color: hsl(206, 100%, 88%);
-    border-radius: 15px;
-    margin-bottom: 2rem;
+#viewActivities{
+/* View Button */
+
+position: absolute;
+width: 650px;
+height: 166px;
+left: 132px;
+top: 486px;
+
+
+
+/* Rectangle 2 */
+
+position: absolute;
+width: 650px;
+height: 166px;
+left: 132px;
+top: 486px;
+
+background: #90DAEE;
+border-radius: 20px;
+
+
+/* View Activities */
+
+position: absolute;
+width: 600px;
+height: 104px;
+left: 182px;
+top: 517px;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 500;
+font-size: 80px;
+line-height: 97px;
+
+color: #000000;
 }
