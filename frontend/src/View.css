@@ -142,6 +142,17 @@ body {
 
 /* jake's stylings */
 
+.view-description-button.rsvped {
+  background-color: #4CAF50;
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: #ff0000;
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+}
+
 .back-button {
   margin-top: 20px;
   padding: 10px 15px;

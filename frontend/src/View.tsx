@@ -39,8 +39,8 @@ const View = () => {
     fetchEvents();
   }, []);
 
-  const handleBackToLanding = () => {
-    navigate("/");
+  const handleBackToHome = () => {
+    navigate("/Home");
   };
 
   return (
@@ -66,6 +66,7 @@ const View = () => {
             events.map((event) => (
               <EventCards
                 key={event.id}
+                id={event.id}
                 title={event.title}
                 time={`${new Date(event.start_time).toLocaleTimeString()} - ${new Date(event.end_time).toLocaleTimeString()}`}
                 location={event.location}
@@ -77,8 +78,8 @@ const View = () => {
             <p>No events available</p>
           )}
         </div>
-        <button onClick={handleBackToLanding} className="back-button">
-          Back to Landing Page
+        <button onClick={handleBackToHome} className="back-button">
+          Back to Home Page
         </button>
       </div>
     </div>
