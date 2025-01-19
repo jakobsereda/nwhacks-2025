@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify, make_response
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-from dateutil.parser import parse
+##from dateutil.parser import parse
 from os import environ
 
 app = Flask(__name__)
@@ -32,8 +32,8 @@ class Event(db.Model):
     __tablename__ = "events"
     id = db.Column(db.Integer, primary_key = True)
     title = db.Column(db.String(200), nullable = False)
-    start_time = db.Column(db.String(100), nullable = False)
-    end_time = db.Column(db.String(100), nullable = False)
+    ##start_time = db.Column(db.DateTime, nullable = False)
+    ##end_time = db.Column(db.DateTime, nullable = False)
     location = db.Column(db.String(200), nullable = False)
     details = db.Column(db.Text, nullable = True)
     creator_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable = False)
@@ -49,8 +49,8 @@ class Event(db.Model):
         return {
             'id': self.id,
             'title': self.title,
-            'start_time': self.start_time,
-            'end_time': self.end_time,
+            ##'start_time': self.start_time,
+            ##'end_time': self.end_time,
             'location': self.location,
             'details': self.details,
             'creator_id': self.creator_id,
@@ -102,7 +102,7 @@ def get_users():
 @app.route('/api/users/<id>', methods = ['GET'])
 def get_user(id):
     try:
-        user = User.queryfilter_by(id=id).first()
+        user = User.query.filter_by(id=id).first()
         if user:
             return make_response(jsonify({'user': user.json()}), 200)
         return make_response(jsonify({'message': 'user not found'}), 404)
@@ -153,12 +153,12 @@ def delete_user(id):
 def create_event():
     try:
         data = request.get_json()
-        start_time = parse(data['start_time'])  # ISO 8601 format (e.g., "2025-01-18T15:30:00")
-        end_time = parse(data['end_time'])      # ISO 8601 format (e.g., "2025-01-18T17:00:00")
+        ##start_time = parse(data['start_time'])  # ISO 8601 format (e.g., "2025-01-18T15:30:00")
+        ##end_time = parse(data['end_time'])      # ISO 8601 format (e.g., "2025-01-18T17:00:00")
         new_event = Event(
             title = data['title'],
-            start_time = start_time,
-            end_time = end_time,
+            ##start_time = start_time,
+            ##end_time = end_time,
             location = data['location'],
             details = data.get('details', None),
             creator_id = data['creator_id']
