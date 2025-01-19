@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify, make_response
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+from datetime import datetime
 from os import environ
 
 app = Flask(__name__)
@@ -21,6 +22,12 @@ class User(db.Model):
             'email': self.email
         }
 
+attendees = db.Table(
+    'attendees',
+    db.Column('user_id', db.Integer, db.ForeignKey('users.id'), primary_key = True),
+    db.Column('event_id', db.Integer, db.ForeignKey('events.id'), primary_key = True)
+)
+
 class Event(db.Model):
     __tablename__ = "events"
     id = db.Column(db.Integer, primary_key = True)
@@ -29,8 +36,14 @@ class Event(db.Model):
     end_time = db.Column(db.String(100), nullable = False)
     location = db.Column(db.String(200), nullable = False)
     details = db.Column(db.Text, nullable = True)
-    attendees = db.Column(db.Text, nullable = True)
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable = False)
+    creator_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable = False)
+    creator = db.relationship("User", backref = "created_events")
+    attendees = db.relationship(
+        "User",
+        secondary = attendees,
+        backref = db.backref("attending_events", lazy = "dynamic"),
+        lazy = "dynamic"
+    )
 
     def json(self):
         return {
@@ -40,8 +53,8 @@ class Event(db.Model):
             'end_time': self.end_time,
             'location': self.location,
             'details': self.details,
-            'attendees': self.attendees,
-            'user_id': self.user_id
+            'creator_id': self.creator_id,
+            'attendees': [user.json() for user in self.attendees]
         }
 
 db.create_all()
@@ -135,4 +148,33 @@ def delete_user(id):
                 'message': 'error deleting user', 
                 'error': str(e)
             }), 500)
+
+@app.route('/api/events', methods=['POST'])
+def create_event():
+    try:
+        data = request.get_json()
+        start_time = datetime.fromisoformat(data['start_time'])  # ISO 8601 format (e.g., "2025-01-18T15:30:00")
+        end_time = datetime.fromisoformat(data['end_time'])      # ISO 8601 format (e.g., "2025-01-18T17:00:00")
+        new_event = Event(
+            title=data['title'],
+            start_time=start_time,
+            end_time=end_time,
+            location=data['location'],
+            details=data.get('details', None),
+            creator_id=data['creator_id']
+        )
+        if 'attendee_ids' in data:
+            attendees = User.query.filter(User.id.in_(data['attendee_ids'])).all()
+            if attendees:
+                new_event.attendees.extend(attendees)
+        db.session.add(new_event)
+        db.session.commit()
+        return jsonify(new_event.json()), 201
+    except Exception as e:
+        return make_response(
+            jsonify({
+                'message': 'Error creating event', 
+                'error': str(e)
+            }), 500)
+
 
