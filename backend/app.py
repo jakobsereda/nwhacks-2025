@@ -1,12 +1,26 @@
 from flask import Flask, request, jsonify, make_response
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-##from dateutil.parser import parse
+from datetime import datetime
 from os import environ
 
-app = Flask(__name__)
-CORS(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('DATABASE_URL')
+def create_app():
+    app = Flask(__name__)
+    CORS(app)
+
+    database_url = environ.get('DATABASE_URL')
+    if database_url and database_url.startswith('postgres://'):
+        database_url = database_url.replace('postgres://', 'postgresql://', 1)
+
+    if not database_url:
+        raise ValueError("No DATABASE_URL environment variable set")
+
+    app.config['SQLALCHEMY_DATABASE_URI'] = database_url
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+    return app
+
+app = create_app()
 db = SQLAlchemy(app)
 
 class User(db.Model):
@@ -32,8 +46,8 @@ class Event(db.Model):
     __tablename__ = "events"
     id = db.Column(db.Integer, primary_key = True)
     title = db.Column(db.String(200), nullable = False)
-    ##start_time = db.Column(db.DateTime, nullable = False)
-    ##end_time = db.Column(db.DateTime, nullable = False)
+    start_time = db.Column(db.DateTime, nullable = False)
+    end_time = db.Column(db.DateTime, nullable = False)
     location = db.Column(db.String(200), nullable = False)
     details = db.Column(db.Text, nullable = True)
     creator_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable = False)
@@ -49,15 +63,19 @@ class Event(db.Model):
         return {
             'id': self.id,
             'title': self.title,
-            ##'start_time': self.start_time,
-            ##'end_time': self.end_time,
+            'start_time': self.start_time,
+            'end_time': self.end_time,
             'location': self.location,
             'details': self.details,
             'creator_id': self.creator_id,
             'attendees': [user.json() for user in self.attendees]
         }
 
-db.create_all()
+def init_db():
+    with app.app_context():
+        db.create_all()
+
+init_db()
 
 # test route
 @app.route('/test', methods = ['GET'])
@@ -153,15 +171,15 @@ def delete_user(id):
 def create_event():
     try:
         data = request.get_json()
-        ##start_time = parse(data['start_time'])  # ISO 8601 format (e.g., "2025-01-18T15:30:00")
-        ##end_time = parse(data['end_time'])      # ISO 8601 format (e.g., "2025-01-18T17:00:00")
+        start_time = datetime.fromisoformat(data['start_time'])  # ISO 8601 format (e.g., "2025-01-18T15:30:00")
+        end_time = datetime.fromisoformat(data['end_time'])      # ISO 8601 format (e.g., "2025-01-18T17:00:00")
         new_event = Event(
-            title = data['title'],
-            ##start_time = start_time,
-            ##end_time = end_time,
-            location = data['location'],
-            details = data.get('details', None),
-            creator_id = data['creator_id']
+            title=data['title'],
+            start_time=start_time,
+            end_time=end_time,
+            location=data['location'],
+            details=data.get('details', None),
+            creator_id=data['creator_id']
         )
         if 'attendee_ids' in data:
             attendees = User.query.filter(User.id.in_(data['attendee_ids'])).all()
@@ -176,5 +194,4 @@ def create_event():
                 'message': 'Error creating event', 
                 'error': str(e)
             }), 500)
-
 
