@@ -11,7 +11,7 @@ const Landing = () => {
         </div>
 
         <div className="landing-body">
-            
+            <h3>See what events are happening near you</h3>
         </div>
       </div>
 
