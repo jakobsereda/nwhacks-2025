@@ -188,6 +188,20 @@ def create_event():
                 'error': str(e)
             }), 500)
 
+# get all events
+@app.route('/api/events', methods=['GET'])
+def get_events():
+    try:
+        events = Event.query.all()
+        events_data = [event.json() for event in events]
+        return jsonify(events_data), 200
+    except Exception as e:
+        return make_response(
+            jsonify({
+                'message': 'error getting events',
+                'error': str(e)
+            }), 500)
+
 # add an attendee to an existing event
 @app.route('/api/events/<event_id>/attendees/<user_id>', methods = ['POST'])
 def add_attendee(event_id, user_id):
@@ -254,5 +268,24 @@ def delete_event(id):
         return make_response(
             jsonify({
                 'message': 'error deleting events',
+                'error': str(e)
+            }), 500)
+
+@app.route('/api/login', methods=['POST'])
+def login_user():
+    try:
+        data = request.get_json()
+        user = User.query.filter_by(name=data['name']).first()
+        if user:
+            return jsonify({
+                'message': 'Login successful',
+                'user_id': user.id
+            }), 200
+        else:
+            return make_response(jsonify({'message': 'User not found'}), 404)
+    except Exception as e:
+        return make_response(
+            jsonify({
+                'message': 'Error logging in',
                 'error': str(e)
             }), 500)

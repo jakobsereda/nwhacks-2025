@@ -81,23 +81,53 @@ h2, h3, h4 {
     flex-direction: row;
     height: 7rem;
     margin-bottom: 2rem;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2rem;
 }
 
 .banner h1 {
     color: #fff;
 }
 
-.login-button {
-    margin-top: 1rem;
-    margin-right: 0.5rem;
-    margin-left: auto;
+.banner-title {
+    text-align: left;
+    font-size: 3rem;
+    margin: 0;
+    padding: 2rem 0;
+    color: #fff;
 }
 
-.login-button h2 {
+#login-button {
+    display: flex;
     background-color: hsl(208, 88%, 75%);
-    right: 0;
-    padding: 8px 12px;
     border-radius: 15px;
+    justify-content: center;
+    align-items: center;
+    margin-left: auto; 
+    margin-right: 3.5rem;
+    padding: 20px 40px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    height: fit-content;
+}
+
+#login-button button {
+    all: unset;
+    font-family: 'Inter', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #000;
+    text-align: center;
+    cursor: pointer;
+}
+
+#login-button:hover {
+    background-color: hsl(208, 88%, 65%);
+}
+
+#login-button button:focus {
+    outline: none;
 }
 
 #landing-body {
@@ -329,4 +359,11 @@ h2, h3, h4 {
 
 .form-actions button[type="button"]:hover {
     background-color: #e53935; /* Darker red on hover */
+}
+
+.banner-title {
+  text-align: center;
+  font-size: 3rem;
+  margin: 0;
+  padding: 2rem 0;
 }

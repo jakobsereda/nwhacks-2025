@@ -44,32 +44,47 @@
   }
 
   /*----------------------------------*/
+
 body {
     font-family: sans-serif;
     margin: 0;
-  }
+}
 
-  .container {
-    display: flex;
-  }
+.container {
+  display: flex;
+  height: 100vh; 
+}
 
-  .map-container {
-    flex: 1;
-    position: relative; /* For absolute positioning of event markers */
-  }
+.map-container {
+  flex: 1;
+  position: relative;
+}
 
-  .map-container img {
-    width: 100%;
-    height: auto;
-  }
+.map-container img {
+  width: 100%;
+  height: auto;
+}
 
-  .event-list {
-    padding: 20px;
-    
-    width: 50rem; /* Adjust width as needed */
-    background-color: #fff;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
+.event-list {
+  padding: 20px;
+  width: 50rem;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.event-list h1 {
+  padding: 0;
+  margin: 0 0 20px 0;
+  font-size: 2.5rem;
+}
+
+.event-cards-container {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 10px;
+}
 
   .event-title {
     padding: 0;
@@ -124,3 +139,20 @@ body {
     border-radius: 5px;
     cursor: pointer;
   }
+
+/* jake's stylings */
+
+.back-button {
+  margin-top: 20px;
+  padding: 10px 15px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.back-button:hover {
+  background-color: #0056b3;
+}
