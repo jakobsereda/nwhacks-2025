@@ -1,7 +1,20 @@
 services:
-  flaskapp:
-    container_name: flaskapp
-    image: flaskapp:1.0.0
+  frontend:
+    container_name: frontend
+    image: frontend:1.0.0
+    build:
+      context: ./frontend
+      dockerfile: vite.dockerfile
+    ports:
+      - 5173:5173
+    environment:
+      - VITE_API_URL=http://localhost:4000
+    depends_on:
+      - backend
+
+  backend:
+    container_name: backend
+    image: backend:1.0.0
     build:
       context: ./backend
       dockerfile: flask.dockerfile
