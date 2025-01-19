@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify, make_response
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-from datetime import datetime
+from dateutil.parser import parse
 from os import environ
 
 app = Flask(__name__)
@@ -153,15 +153,15 @@ def delete_user(id):
 def create_event():
     try:
         data = request.get_json()
-        start_time = datetime.fromisoformat(data['start_time'])  # ISO 8601 format (e.g., "2025-01-18T15:30:00")
-        end_time = datetime.fromisoformat(data['end_time'])      # ISO 8601 format (e.g., "2025-01-18T17:00:00")
+        start_time = parse(data['start_time'])  # ISO 8601 format (e.g., "2025-01-18T15:30:00")
+        end_time = parse(data['end_time'])      # ISO 8601 format (e.g., "2025-01-18T17:00:00")
         new_event = Event(
-            title=data['title'],
-            start_time=start_time,
-            end_time=end_time,
-            location=data['location'],
-            details=data.get('details', None),
-            creator_id=data['creator_id']
+            title = data['title'],
+            start_time = start_time,
+            end_time = end_time,
+            location = data['location'],
+            details = data.get('details', None),
+            creator_id = data['creator_id']
         )
         if 'attendee_ids' in data:
             attendees = User.query.filter(User.id.in_(data['attendee_ids'])).all()
