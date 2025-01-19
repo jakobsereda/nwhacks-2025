@@ -54,8 +54,6 @@ height: 166px;
 left: 132px;
 top: 694px;
 
-
-
 /* Rectangle 2 */
 
 position: absolute;
@@ -67,11 +65,10 @@ top: 694px;
 background: #A8EE90;
 border-radius: 20px;
 
-
 /* Host Activity */
 
 position: absolute;
-width: 502.56px;
+width: 600px;
 height: 103.59px;
 left: 182px;
 top: 725px;
@@ -83,6 +80,4 @@ font-size: 70px;
 line-height: 97px;
 
 color: #000000;
-
-
 }
