@@ -1,13 +1,29 @@
 import React from "react";
 import Map from "./Map";
+import Event from "./components/Event"
+import EventCards from "./components/EventCards"
 
+let events: Event[] = [];
+events.push(new Event("Beach Walk", "3:00pm - 5:00pm", "Jericho Beach", "Sunset Walks! Slow pace"));
+events.push(new Event("Movie Night", "6:00pm - 8:00pm", "Highsbury Apt, 6th Ave", "Watching spooky films tonight"));
+events.push(new Event("Board games", "7:00pm - 8:00pm", "1710 Dunbar St, W 1st Ave", "Calm card games after dinner"))
+
+/*let block = 
+    events.forEach(event => {
+        let et = event.title;
+        <EventCards title=et 
+        
+      }); */
 const View = () => {
+    
   return (
-    <>    
+    <>
       <div className="container">
         <div className="map-container">
-            <Map/>
-          {/*<img src="path/to/your/map.jpg" alt="Map of Jericho Beach">*/}
+          <div id="map">
+            <Map xCoordinate={49.2624} yCoordinate={-123.2451} />
+          </div>
+
           <div
             className="event-marker"
             style={{
@@ -35,31 +51,12 @@ const View = () => {
         </div>
 
         <div className="event-list">
-          <h2>Events</h2>
-          <div className="event-item">
-            <h3 className="event-title">Beach Walk</h3>
-            <p className="event-time">3:00pm - 5:00pm</p>
-            <p className="event-location">Jericho Beach Park</p>
-            <button className="view-description-button">
-              View Description
-            </button>
-          </div>
-          <div className="event-item">
-            <h3 className="event-title">Movie Night</h3>
-            <p className="event-time">6:00pm - 8:00pm</p>
-            <p className="event-location">Highsbury Apt, 6th Ave</p>
-            <button className="view-description-button">
-              View Description
-            </button>
-          </div>
-          <div className="event-item">
-            <h3 className="event-title">Board Games</h3>
-            <p className="event-time">3:00pm - 5:00pm</p>
-            <p className="event-location">1710 Dunbar St, W 1st Ave</p>
-            <button className="view-description-button">
-              View Description
-            </button>
-          </div>
+          <h1>Events</h1>
+          
+          <EventCards title="Beach Walk" time="3:00pm - 5:00pm" location="Jericho Beach Park" description="Sunset Walks! Slow pace"></EventCards>
+          <EventCards title="Movie Night" time="6:00pm - 8:00pm" location="1710 Dunbar St, W 1st Ave" description="Watching spooky films tonight"></EventCards>
+          <EventCards title="Board Games" time="7:30pm - 8:30pm" location="1710 Dunbar St, W 1st Ave" description="After dinner relax"></EventCards>
+    
         </div>
       </div>
     </>
