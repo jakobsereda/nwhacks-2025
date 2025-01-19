@@ -12,7 +12,7 @@ interface Props {
   }[];
 }
 
-const Map = ({ xCoordinate, yCoordinate, events }: Props) => {
+const Map = React.memo(({ xCoordinate, yCoordinate, events }: Props) => {
   useEffect(() => {
     const map = L.map("mapContainer").setView([xCoordinate, yCoordinate], 16);
 
@@ -57,6 +57,6 @@ const Map = ({ xCoordinate, yCoordinate, events }: Props) => {
       <div id="mapContainer" style={{ width: "65vw", height: "100vh" }} />
     </div>
   );
-};
+});
 
 export default Map;
