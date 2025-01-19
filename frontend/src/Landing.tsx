@@ -6,7 +6,11 @@ const Landing = () => {
       <div className="banner">
         <h1>Out&About</h1>
       </div>
+
+      <h2></h2>
     </>
+
+
   );
 };
 
