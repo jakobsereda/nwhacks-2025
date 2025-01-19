@@ -167,7 +167,8 @@ def delete_user(id):
                 'error': str(e)
             }), 500)
 
-@app.route('/api/events', methods=['POST'])
+# create an event
+@app.route('/api/events', methods = ['POST'])
 def create_event():
     try:
         data = request.get_json()
@@ -195,3 +196,71 @@ def create_event():
                 'error': str(e)
             }), 500)
 
+# add an attendee to an existing event
+@app.route('/api/events/<event_id>/attendees/<user_id>', methods = ['POST'])
+def add_attendee(event_id, user_id):
+    try:
+        with app.app_context():
+            event = Event.query.get(event_id)
+            user = User.query.get(user_id)
+            if not event:
+                return make_response(jsonify({'message': f'Event with id {event_id} not found'}), 404)
+            if not user:
+                return make_response(jsonify({'message': f'User with id {user_id} not found'}), 404)
+            if user in event.attendees:
+                return make_response(jsonify({'message': 'User is already an attendee'}), 400)
+            event.attendees.append(user)
+            db.session.commit()
+            return jsonify({
+                'message': 'Attendee added successfully',
+                'event': event.json()
+            }), 200
+    except Exception as e:
+        return make_response(
+            jsonify({
+                'message': 'Error adding attendee',
+                'error': str(e)
+            }), 500)
+
+# update an event by id
+@app.route('/api/events/<id>', methods = ['PUT'])
+def update_event(id):
+    try:
+        event = Event.query.filter_by(id=id).first()
+        if not event:
+            return make_response(jsonify({'message': 'Event not found'}), 404)
+        data = request.get_json()
+        event.title = data.get('title', event.title)
+        event.start_time = datetime.fromisoformat(data['start_time']) if 'start_time' in data else event.start_time
+        event.end_time = datetime.fromisoformat(data['end_time']) if 'end_time' in data else event.end_time
+        event.location = data.get('location', event.location)
+        event.details = data.get('details', event.details)
+        if 'attendee_ids' in data:
+            attendees = User.query.filter(User.id.in_(data['attendee_ids'])).all()
+            if attendees:
+                event.attendees = attendees
+        db.session.commit()
+        return jsonify({'message': 'Event updated successfully', 'event': event.json()}), 200
+    except Exception as e:
+        return make_response(
+            jsonify({
+                'message': 'Error updating event',
+                'error': str(e)
+            }), 500)
+
+# delete an event by id
+@app.route('/api/events/<id>', methods = ['DELETE'])
+def delete_event(id):
+    try:
+        event = Event.query.filter_by(id=id).first()
+        if event:
+            db.session.delete(event)
+            db.session.commit()
+            return make_response(jsonify({'message': 'event deleted'}), 200)
+        return make_response(jsonify({'message': 'event not found'}), 404)
+    except Exception as e:
+        return make_response(
+            jsonify({
+                'message': 'error deleting events', 
+                'error': str(e)
+            }), 500)
