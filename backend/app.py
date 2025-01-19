@@ -7,17 +7,9 @@ from os import environ
 def create_app():
     app = Flask(__name__)
     CORS(app)
-
     database_url = environ.get('DATABASE_URL')
-    if database_url and database_url.startswith('postgres://'):
-        database_url = database_url.replace('postgres://', 'postgresql://', 1)
-
-    if not database_url:
-        raise ValueError("No DATABASE_URL environment variable set")
-
     app.config['SQLALCHEMY_DATABASE_URI'] = database_url
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
     return app
 
 app = create_app()
@@ -192,7 +184,7 @@ def create_event():
     except Exception as e:
         return make_response(
             jsonify({
-                'message': 'Error creating event', 
+                'message': 'error creating event', 
                 'error': str(e)
             }), 500)
 
@@ -204,21 +196,21 @@ def add_attendee(event_id, user_id):
             event = Event.query.get(event_id)
             user = User.query.get(user_id)
             if not event:
-                return make_response(jsonify({'message': f'Event with id {event_id} not found'}), 404)
+                return make_response(jsonify({'message': f'event with id {event_id} not found'}), 404)
             if not user:
-                return make_response(jsonify({'message': f'User with id {user_id} not found'}), 404)
+                return make_response(jsonify({'message': f'user with id {user_id} not found'}), 404)
             if user in event.attendees:
-                return make_response(jsonify({'message': 'User is already an attendee'}), 400)
+                return make_response(jsonify({'message': 'user is already an attendee'}), 400)
             event.attendees.append(user)
             db.session.commit()
             return jsonify({
-                'message': 'Attendee added successfully',
+                'message': 'attendee added successfully',
                 'event': event.json()
             }), 200
     except Exception as e:
         return make_response(
             jsonify({
-                'message': 'Error adding attendee',
+                'message': 'error adding attendee',
                 'error': str(e)
             }), 500)
 
@@ -228,7 +220,7 @@ def update_event(id):
     try:
         event = Event.query.filter_by(id=id).first()
         if not event:
-            return make_response(jsonify({'message': 'Event not found'}), 404)
+            return make_response(jsonify({'message': 'event not found'}), 404)
         data = request.get_json()
         event.title = data.get('title', event.title)
         event.start_time = datetime.fromisoformat(data['start_time']) if 'start_time' in data else event.start_time
@@ -240,11 +232,11 @@ def update_event(id):
             if attendees:
                 event.attendees = attendees
         db.session.commit()
-        return jsonify({'message': 'Event updated successfully', 'event': event.json()}), 200
+        return jsonify({'message': 'event updated successfully', 'event': event.json()}), 200
     except Exception as e:
         return make_response(
             jsonify({
-                'message': 'Error updating event',
+                'message': 'error updating event',
                 'error': str(e)
             }), 500)
 
@@ -261,6 +253,6 @@ def delete_event(id):
     except Exception as e:
         return make_response(
             jsonify({
-                'message': 'error deleting events', 
+                'message': 'error deleting events',
                 'error': str(e)
             }), 500)
