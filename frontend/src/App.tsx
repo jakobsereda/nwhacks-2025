@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import "./styles.css";
 import Landing from "./Landing";
+import Home from "./Home"
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Landing />} />
+          <Route path="/Home" element={<Home />} />
 
           {/* Add more routes as needed, for example: */}
           {/* <Route path="/topics" element={<Topics />} /> */}
